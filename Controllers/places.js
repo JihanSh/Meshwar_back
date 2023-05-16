@@ -11,7 +11,7 @@ cloudinary.config({
 class Controller {
   async post(req, res) {
     try {
-      const { name, description, city, price, location } = req.body;
+      const { name, description, city, price, location,activity} = req.body;
 
       let images = [];
 
@@ -32,7 +32,7 @@ class Controller {
       } else if (images.length > 0) {
         mainImage = images[0].url;
       }
-      const activity = await Activity.findOne(req.body.id);
+      // const activity = await Activity.findOne(req.body.id);
 
       const place = new Place({
         name,
@@ -44,7 +44,9 @@ class Controller {
         location,
         activity: activity,
       });
-      const savedPlace = await place.save();
+      const savedPlace = await place.populate("activity");
+      await savedPlace.save();
+
       res.status(201).json({ place: savedPlace });
     } catch (error) {
       console.error(error);
@@ -66,6 +68,7 @@ class Controller {
     const { id } = req.params;
     try {
       const place = await Place.findById(id).populate("location", "name");
+
       if (!place) {
         res.status(404).json({ message: "place not found" });
       } else {
