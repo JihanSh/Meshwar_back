@@ -137,7 +137,7 @@ export const updateUser = async (req, res, next) => {
   };
   try {
     // Find the user by their ID and update their information
-    const updatedUser = await User.findByIdAndUpdate(userId, updateData, {
+    const updatedUser = await User.findByIdAndUpdate(userId, req.body, {
       new: true,
     });
     // If the user is not found, return a 404 error

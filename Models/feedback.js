@@ -8,22 +8,36 @@ const feedbackSchema = new Schema(
       type: String,
       required: true,
     },
-    images: {
-      type: String,
-    },
-    rating: {
+    images: [
+      {
+        public_id: {
+          type: String,
+          //required: true,
+        },
+        url: {
+          type: String,
+          //required: true,
+        },
+      },
+    ],
+    stars: {
       type: Number,
+      required: true,
     },
-    user_id:[ {
-      type: Schema.Types.ObjectId,
-      ref: "User",
-      required: [true, "Please include the user"],
-    }],
-    place_id: [{
-      type: Schema.Types.ObjectId,
-      ref: "Place",
-      required: [true, "Please include the Place"],
-    }],
+    user_id: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+        required: [true, "Please include the user"],
+      },
+    ],
+    place_id: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Place",
+        required: [true, "Please include the Place"],
+      },
+    ],
   },
   { timestamps: true }
 );

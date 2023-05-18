@@ -8,6 +8,7 @@ import user from "./routes/user.js";
 import activity from "./routes/activity.js";
 import places from "./routes/places.js";
 import cookieParser from "cookie-parser";
+import feedbacks from "./routes/feedback.js";
 
 dotenv.config();
 await connectDB();
@@ -28,6 +29,7 @@ app.use(cookieParser());
 app.use("/user",user)
 app.use("/activity", activity);
 app.use("/place", places);
+app.use("/feedback", feedbacks);
 
 app.listen(
   PORT,
