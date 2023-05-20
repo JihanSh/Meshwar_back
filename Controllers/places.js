@@ -11,10 +11,24 @@ cloudinary.config({
 class Controller {
   async post(req, res) {
     try {
-      const { name, description, city, price, location,activity} = req.body;
+      const { name, description, city, price, activity, location } = req.body;
+      console.log(activity);
 
       let images = [];
-
+      let activities = [];
+      if (activity) {
+        for (let i = 0; i < activity.length; i++) {
+          console.log("we are in loop aaaaaa");
+          activities.push(activity[i]);
+        }
+      }
+      let locations = [];
+      if (location) {
+        for (let i = 0; i < location.length; i++) {
+          console.log("we are in loop aaaaaa");
+          locations.push(location[i]);
+        }
+      }
       if (req.files && req.files.length > 0) {
         for (let i = 0; i < req.files.length; i++) {
           const uploadedImage = await cloudinary.uploader.upload(
@@ -27,11 +41,12 @@ class Controller {
         }
       }
       let mainImage;
-      if (req.files.images && req.files.images.length > 0) {
+      if (req.files && req.files.images && req.files.images.length > 0) {
         mainImage = req.files.images[0].url;
       } else if (images.length > 0) {
         mainImage = images[0].url;
       }
+
       // const activity = await Activity.findOne(req.body.id);
 
       const place = new Place({
@@ -41,12 +56,10 @@ class Controller {
         description,
         price,
         city,
-        location,
-        activity: activity,
+        activity: activities,
+        location: location,
       });
-      const savedPlace = await place.populate("activity");
-      await savedPlace.save();
-
+      const savedPlace = await place.save();
       res.status(201).json({ place: savedPlace });
     } catch (error) {
       console.error(error);
@@ -57,7 +70,7 @@ class Controller {
   //get all the products
   async getAll(req, res) {
     try {
-      const places = await Place.find().populate("location", "name");
+      const places = await Place.find().populate("activity", "location");
       res.status(200).json(places);
     } catch (error) {
       res.status(500).json({ message: error.message });
@@ -67,7 +80,7 @@ class Controller {
   async get(req, res) {
     const { id } = req.params;
     try {
-      const place = await Place.findById(id).populate("location", "name");
+      const place = await Place.findById(id).populate("activity", "location");
 
       if (!place) {
         res.status(404).json({ message: "place not found" });
@@ -182,34 +195,16 @@ class Controller {
     });
   }
 
-  async getPlacebyActivity(req, res) {
-    console.log("hello");
-    const page = req.query.page * 1 || 1;
-    const limit = req.query.limit * 1 || 8;
-
-    const activityId = req.params.id;
-    // Count the total number of products
-    const count = await Place.countDocuments({ activity: activityId });
-
-    // Calculate the total number of pages
-    const totalPages = Math.ceil(count / limit);
-
-    const skip = (page - 1) * limit;
-    console.log("activityId: ", activityId);
+  async getPlacebyActivityandLocation(req, res) {
+    const activityId = req.params.activity;
+    const locationId = req.params.location;
+   
     try {
       const places = await Place.find({
         activity: activityId,
-      })
-        .sort({ date_added: -1 })
-        .skip(skip)
-        .limit(limit);
-      console.log("place", Place);
-      res.status(200).json({
-        results: places.length,
-        page,
-        totalPages, // Add totalPages to the response object
-        data: places,
+        location: locationId
       });
+      res.status(200).json(places);
     } catch (err) {
       res.status(500).json({ message: err.message });
     }

@@ -2,23 +2,32 @@ import Location from "../Models/location.js";
 
 export const createLocation = async (req, res) => {
   try {
-    const newLocation = new Location({
-      name: req.body.name,
-    });
-    await newLocation.save();
-    res.status(201).json(newLocation);
-  } catch (error) {
-    if (error) {
-      return res.status(400).json({ message: error.message });
+    const { name, activity } = req.body;
+    console.log(activity);
+    let activities = [];
+    if (activity) {
+      for (let i = 0; i < activity.length; i++) {
+        console.log("we are in loop aaaaaa");
+        activities.push(activity[i]);
+      }
     }
-    res.status(500).json({ message: "Internal Server Error" });
+    const location = new Location({
+      name,
+      activity: activities
+    });
+    const savedLocation = await location.save();
+    res.status(201).json({ place: savedLocation });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
   }
 };
+
 
 export const getAllLocations = async (req, res) => {
   try {
     const Locations = await Location.find();
-    res.status(200).json(Activities);
+    res.status(200).json(Locations);
   } catch (err) {
     res.status(500).json({ error: err });
   }

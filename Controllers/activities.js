@@ -5,7 +5,6 @@ export const createActivity = async (req, res) => {
     const newActivity = new Activity({
       name: req.body.name,
       description: req.body.description,
-      location: req.body.location,
     });
     await newActivity.save();
     res.status(201).json(newActivity);
@@ -66,7 +65,9 @@ export const deleteActivity = async (req, res, next) => {
   await Activity.findById(id)
     .then((activity) => activity.deleteOne())
     .then((activity) =>
-      res.status(201).json({ message: "activity successfully deleted", activity })
+      res
+        .status(201)
+        .json({ message: "activity successfully deleted", activity })
     )
     .catch((error) =>
       res
@@ -74,4 +75,3 @@ export const deleteActivity = async (req, res, next) => {
         .json({ message: "An error occurred", error: error.message })
     );
 };
-

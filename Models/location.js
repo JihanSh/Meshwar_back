@@ -1,11 +1,9 @@
 import Mongoose from "mongoose";
-const Schema = new Mongoose.Schema();
-const locationSchema = new Schema({
+const locationSchema = new Mongoose.Schema({
   name: {
     type: String,
-    required: true, 
+    required: true,
   },
-
 });
 const Location = Mongoose.model("Location", locationSchema);
 export default Location;

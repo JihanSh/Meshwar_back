@@ -9,8 +9,8 @@ import {
 
 
 const activity = express.Router();
-activity.post('/create',createActivity);
-activity.get("/all", getAllActivities);
+activity.post('/',createActivity);
+activity.get("/", getAllActivities);
 activity.get("/:id", getActivityById);
 activity.put("/:id", editActivity);
 activity.delete("/:id", deleteActivity);

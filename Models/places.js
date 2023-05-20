@@ -30,15 +30,15 @@ const placeSchema = new Mongoose.Schema({
   price: {
     type: Number || String,
   },
-  activity: {
+  activity:[ {
     type: Mongoose.Schema.Types.ObjectId,
     ref: "Activity",
-    required: [true, "Please include the product category"],
-  },
-  location: {
+   
+  }],
+  location:[ {
     type: Mongoose.Schema.Types.ObjectId,
     ref: "Location",
-  },
+  }],
 });
 const Place = Mongoose.model("Place", placeSchema);
 export default Place;
