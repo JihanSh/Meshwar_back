@@ -18,7 +18,7 @@ export const createActivity = async (req, res) => {
 
 export const getAllActivities = async (req, res) => {
   try {
-    const Activities = await Activity.find();
+    const Activities = await Activity.find().populate("place");
     res.status(200).json(Activities);
   } catch (err) {
     res.status(500).json({ error: err });

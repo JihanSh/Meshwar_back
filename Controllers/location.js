@@ -1,19 +1,40 @@
 import Location from "../Models/location.js";
+import { v2 as cloudinary } from "cloudinary";
 
+cloudinary.config({
+  cloud_name: "dhwyohosi",
+  api_key: "494698875236269",
+  api_secret: "MQ3B9Sogc_df25D_29KqEzUN4sk",
+});
 export const createLocation = async (req, res) => {
   try {
-    const { name, activity } = req.body;
-    console.log(activity);
-    let activities = [];
-    if (activity) {
-      for (let i = 0; i < activity.length; i++) {
-        console.log("we are in loop aaaaaa");
-        activities.push(activity[i]);
+    const { name} = req.body;
+    let images = [];
+
+    if (req.files && req.files.length > 0) {
+      for (let i = 0; i < req.files.length; i++) {
+        const uploadedImage = await cloudinary.uploader.upload(
+          req.files[i].path
+        );
+        images.push({
+          public_id: uploadedImage.public_id,
+          url: uploadedImage.secure_url,
+        });
       }
     }
+
+    let mainImage;
+    if (req.files.images && req.files.images.length > 0) {
+      mainImage = req.files.images[0].url;
+    } else if (images.length > 0) {
+      mainImage = images[0].url;
+    }
+
     const location = new Location({
       name,
-      activity: activities
+  
+      images,
+      mainImage
     });
     const savedLocation = await location.save();
     res.status(201).json({ place: savedLocation });
@@ -22,7 +43,6 @@ export const createLocation = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
-
 
 export const getAllLocations = async (req, res) => {
   try {

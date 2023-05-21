@@ -7,7 +7,12 @@ const activitySchema = new Mongoose.Schema({
   description: {
     type: String,
   },
-
+  place: [
+    {
+      type: Mongoose.Schema.Types.ObjectId,
+      ref: "Place",
+    },
+  ],
 });
 const Activity = Mongoose.model("Activity", activitySchema);
 export default Activity;

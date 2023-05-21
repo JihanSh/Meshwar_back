@@ -198,11 +198,23 @@ class Controller {
   async getPlacebyActivityandLocation(req, res) {
     const activityId = req.params.activity;
     const locationId = req.params.location;
-   
+
     try {
       const places = await Place.find({
         activity: activityId,
-        location: locationId
+        location: locationId,
+      });
+      res.status(200).json(places);
+    } catch (err) {
+      res.status(500).json({ message: err.message });
+    }
+  }
+  async getPlacebyLocation(req, res) {
+    const locationId = req.params.location;
+
+    try {
+      const places = await Place.find({
+        location: locationId,
       });
       res.status(200).json(places);
     } catch (err) {

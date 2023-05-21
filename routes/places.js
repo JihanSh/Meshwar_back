@@ -10,7 +10,11 @@ places.get("/:id", controller.get);
 places.put("/:id", upload.array("images"), controller.put);
 places.delete("/:id", controller.delete);
 places.get("/pag", controller.getPagination);
-places.get("/list/:activity/:location", controller.getPlacebyActivityandLocation); 
-
+places.get(
+  "/list/:activity/:location",
+  controller.getPlacebyActivityandLocation
+);
+// places.get("/list/:activity", controller.getPlacebyActivity);
+places.get("/list/:location", controller.getPlacebyLocation);
 
 export default places;
