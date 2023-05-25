@@ -15,20 +15,7 @@ class Controller {
       console.log(activity);
 
       let images = [];
-      let activities = [];
-      if (activity) {
-        for (let i = 0; i < activity.length; i++) {
-          console.log("we are in loop aaaaaa");
-          activities.push(activity[i]);
-        }
-      }
-      let locations = [];
-      if (location) {
-        for (let i = 0; i < location.length; i++) {
-          console.log("we are in loop aaaaaa");
-          locations.push(location[i]);
-        }
-      }
+
       if (req.files && req.files.length > 0) {
         for (let i = 0; i < req.files.length; i++) {
           const uploadedImage = await cloudinary.uploader.upload(
@@ -56,8 +43,8 @@ class Controller {
         description,
         price,
         city,
-        activity: activities,
-        location: location,
+        activity,
+        location,
       });
       const savedPlace = await place.save();
       res.status(201).json({ place: savedPlace });
@@ -70,7 +57,7 @@ class Controller {
   //get all the products
   async getAll(req, res) {
     try {
-      const places = await Place.find().populate("activity", "location");
+      const places = await Place.find().populate("activity").populate("location");
       res.status(200).json(places);
     } catch (error) {
       res.status(500).json({ message: error.message });
@@ -203,7 +190,8 @@ class Controller {
       const places = await Place.find({
         activity: activityId,
         location: locationId,
-      });
+      }).populate();
+
       res.status(200).json(places);
     } catch (err) {
       res.status(500).json({ message: err.message });
@@ -215,7 +203,19 @@ class Controller {
     try {
       const places = await Place.find({
         location: locationId,
-      });
+      }).populate("location");
+      res.status(200).json(places);
+    } catch (err) {
+      res.status(500).json({ message: err.message });
+    }
+  }
+  async getPlacebyActivity(req, res) {
+    const activityId = req.params.activity;
+
+    try {
+      const places = await Place.find({
+        activity: activityId,
+      }).populate("activity");
       res.status(200).json(places);
     } catch (err) {
       res.status(500).json({ message: err.message });

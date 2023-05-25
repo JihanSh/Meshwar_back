@@ -1,20 +1,47 @@
 import Activity from "../Models/activities.js";
+import { v2 as cloudinary } from "cloudinary";
 
+cloudinary.config({
+  cloud_name: "dhwyohosi",
+  api_key: "494698875236269",
+  api_secret: "MQ3B9Sogc_df25D_29KqEzUN4sk",
+});
 export const createActivity = async (req, res) => {
+  
   try {
-    const newActivity = new Activity({
-      name: req.body.name,
-      description: req.body.description,
-    });
-    await newActivity.save();
-    res.status(201).json(newActivity);
-  } catch (error) {
-    if (error) {
-      return res.status(400).json({ message: error.message });
+    const {name,description} = req.body
+
+      let images = [];
+            if (req.files && req.files.length > 0) {
+        for (let i = 0; i < req.files.length; i++) {
+          const uploadedImage = await cloudinary.uploader.upload(
+            req.files[i].path
+          );
+          images.push({
+            public_id: uploadedImage.public_id,
+            url: uploadedImage.secure_url,
+          });
+        }
+      }
+      let mainImage;
+      if (req.files && req.files.images && req.files.images.length > 0) {
+        mainImage = req.files.images[0].url;
+      } else if (images.length > 0) {
+        mainImage = images[0].url;
+      }
+ const activity = new Activity({
+        name,
+        images,
+        mainImage,
+        description,
+      });
+      const savedActivity = await activity.save();
+      res.status(201).json({ activity: savedActivity  });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Server error" });
     }
-    res.status(500).json({ message: "Internal Server Error" });
   }
-};
 
 export const getAllActivities = async (req, res) => {
   try {

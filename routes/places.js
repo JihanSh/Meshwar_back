@@ -16,5 +16,6 @@ places.get(
 );
 // places.get("/list/:activity", controller.getPlacebyActivity);
 places.get("/list/:location", controller.getPlacebyLocation);
+places.get("/list/:activity", controller.getPlacebyActivity);
 
 export default places;

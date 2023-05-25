@@ -6,10 +6,11 @@ import {
   editActivity,
   deleteActivity,
 } from "../Controllers/activities.js";
+import { upload } from "../middleware/upload.js";
 
 
 const activity = express.Router();
-activity.post('/',createActivity);
+activity.post('/',upload.array("images"),createActivity);
 activity.get("/", getAllActivities);
 activity.get("/:id", getActivityById);
 activity.put("/:id", editActivity);

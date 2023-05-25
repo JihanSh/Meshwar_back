@@ -13,6 +13,22 @@ const activitySchema = new Mongoose.Schema({
       ref: "Place",
     },
   ],
+  images: [
+    {
+      public_id: {
+        type: String,
+        //required: true,
+      },
+      url: {
+        type: String,
+        //required: true,
+      },
+    },
+  ],
+  mainImage: {
+    type: String,
+    default: "",
+  },
 });
 const Activity = Mongoose.model("Activity", activitySchema);
 export default Activity;
