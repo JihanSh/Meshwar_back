@@ -57,7 +57,9 @@ class Controller {
   //get all the products
   async getAll(req, res) {
     try {
-      const places = await Place.find().populate("activity").populate("location");
+      const places = await Place.find()
+        .populate("activity")
+        .populate("location");
       res.status(200).json(places);
     } catch (error) {
       res.status(500).json({ message: error.message });
@@ -197,25 +199,25 @@ class Controller {
       res.status(500).json({ message: err.message });
     }
   }
-  async getPlacebyLocation(req, res) {
-    const locationId = req.params.location;
-
+  async getPlacebyActivity(req, res) {
+    const activityId = req.params.activity;
+    console.log(activityId);
     try {
       const places = await Place.find({
-        location: locationId,
-      }).populate("location");
+        activity: activityId,
+      }).populate();
       res.status(200).json(places);
     } catch (err) {
       res.status(500).json({ message: err.message });
     }
   }
-  async getPlacebyActivity(req, res) {
-    const activityId = req.params.activity;
-
+  async getPlacebyLocation(req, res) {
+    const locationId = req.params.location;
+    console.log(locationId);
     try {
       const places = await Place.find({
-        activity: activityId,
-      }).populate("activity");
+        location: locationId,
+      }).populate("location");
       res.status(200).json(places);
     } catch (err) {
       res.status(500).json({ message: err.message });

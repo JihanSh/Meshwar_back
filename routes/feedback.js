@@ -8,6 +8,7 @@ feedbacks.post("/", upload.array("images"), controller.post);
 feedbacks.get("/", controller.getAll);
 feedbacks.get("/:id", controller.get);
 feedbacks.put("/:id", controller.put);
+feedbacks.get("/show/:id", controller.getFeedbackofPlace);
 // feedbacks.delete("/:id", controller.delete);
 // feedbacks.get("/pag", controller.getPagination);
 // feedbacks.get("/list/:id", controller.getPlacebyActivity);

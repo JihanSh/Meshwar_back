@@ -10,7 +10,7 @@ cloudinary.config({
 class Controller {
   async post(req, res) {
     try {
-      const { description, stars, user_id, place_id } = req.body;
+      const { description, stars, user_id, place } = req.body;
 
       let images = [];
 
@@ -30,8 +30,8 @@ class Controller {
         description,
         stars,
         images,
-        user_id,
-        place_id,
+        user_id,  
+        place,
       });
       const savedFeedback = await feedback.populate("user_id", "username");
       console.log(savedFeedback);
@@ -178,6 +178,17 @@ class Controller {
         totalPages, // Add totalPages to the response object
         data: places,
       });
+    } catch (err) {
+      res.status(500).json({ message: err.message });
+    }
+  }
+  async getFeedbackofPlace(req, res) {
+    const placeId = req.params.place;
+    try {
+      const places = await Feedback.find({
+        place: placeId,
+      }).populate("place");
+      res.status(200).json(places);
     } catch (err) {
       res.status(500).json({ message: err.message });
     }

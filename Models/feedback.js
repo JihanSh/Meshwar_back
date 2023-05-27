@@ -31,7 +31,7 @@ const feedbackSchema = new Schema(
         required: [true, "Please include the user"],
       },
     ],
-    place_id: [
+    place: [
       {
         type: Schema.Types.ObjectId,
         ref: "Place",
