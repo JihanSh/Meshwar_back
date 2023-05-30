@@ -11,7 +11,7 @@ cloudinary.config({
 class Controller {
   async post(req, res) {
     try {
-      const { name, description, city, price, activity, location } = req.body;
+      const { name, description, city, price, rating, activity, location } = req.body;
       console.log(activity);
 
       let images = [];
@@ -43,6 +43,7 @@ class Controller {
         description,
         price,
         city,
+        rating,
         activity,
         location,
       });
@@ -54,7 +55,7 @@ class Controller {
     }
   }
 
-  //get all the products
+  //get all the places
   async getAll(req, res) {
     try {
       const places = await Place.find()
@@ -65,6 +66,20 @@ class Controller {
       res.status(500).json({ message: error.message });
     }
   }
+  async  getRandomPlace(req, res) {
+  try {
+    const count = await Place.countDocuments(); // Get the total count of places in the database
+    const randomIndex = Math.floor(Math.random() * count); // Generate a random index within the range of the count
+    const randomPlace = await Place.findOne()
+      .populate("activity","name")
+      .populate("location","name")
+      .skip(randomIndex); // Skip to the random index
+    res.status(200).json(randomPlace);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+}
+
   // get product by id
   async get(req, res) {
     const { id } = req.params;

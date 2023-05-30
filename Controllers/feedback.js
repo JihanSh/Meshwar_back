@@ -8,42 +8,6 @@ cloudinary.config({
 });
 
 class Controller {
-  async post(req, res) {
-    try {
-      const { description, stars, user_id, place } = req.body;
-
-      let images = [];
-
-      if (req.files && req.files.length > 0) {
-        for (let i = 0; i < req.files.length; i++) {
-          const uploadedImage = await cloudinary.uploader.upload(
-            req.files[i].path
-          );
-          images.push({
-            public_id: uploadedImage.public_id,
-            url: uploadedImage.secure_url,
-          });
-        }
-      }
-
-      const feedback = new Feedback({
-        description,
-        stars,
-        images,
-        user_id,  
-        place,
-      });
-      const savedFeedback = await feedback.populate("user_id", "username");
-      console.log(savedFeedback);
-      await savedFeedback.save();
-
-      res.status(201).json({ feedback: savedFeedback });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: "Server error" });
-    }
-  }
-
   //get all the feedbacks
   async getAll(req, res) {
     try {
@@ -53,6 +17,54 @@ class Controller {
       res.status(500).json({ message: error.message });
     }
   }
+async  post(req, res) {
+  try {
+    const { description, stars, user_id, place } = req.body;
+
+    let images = [];
+
+    if (req.files && req.files.length > 0) {
+      for (let i = 0; i < req.files.length; i++) {
+        const uploadedImage = await cloudinary.uploader.upload(req.files[i].path);
+        images.push({
+          public_id: uploadedImage.public_id,
+          url: uploadedImage.secure_url,
+        });
+      }
+    }
+
+    const feedback = new Feedback({
+      description,
+      stars,
+      images,
+      user_id,
+      place,
+    });
+
+    await feedback.populate("user_id", "username");
+    await feedback.save();
+
+    // Calculate the average feedback for the place
+    const feedbacks = await Feedback.find({ place: place });
+    const totalFeedbacks = feedbacks.length;
+    let totalStars = 0;
+
+    for (let i = 0; i < totalFeedbacks; i++) {
+      totalStars += feedbacks[i].stars;
+    }
+
+    const averageStars = totalFeedbacks > 0 ? totalStars / totalFeedbacks : 0;
+
+    res.status(201).json({ feedback, averageStars });
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+}
+
+
+
   // get feedback by id
   async get(req, res) {
     const { id } = req.params;

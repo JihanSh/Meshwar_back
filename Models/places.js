@@ -30,6 +30,9 @@ const placeSchema = new Mongoose.Schema({
   price: {
     type: Number || String,
   },
+  rating:{
+type: Number
+  },
   activity:[ {
     type: Mongoose.Schema.Types.ObjectId,
     ref: "Activity",

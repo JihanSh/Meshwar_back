@@ -14,7 +14,6 @@ export const register = async (req, res, next) => {
     if (
       !req.body ||
       !req.body.username ||
-      !req.body.email ||
       !req.body.password 
     ) {
       return res.status(400).json({ error: "Missing required fields" });
@@ -30,7 +29,6 @@ export const register = async (req, res, next) => {
     const hash = await bcrypt.hash(req.body.password, 10);
     const user = await User.create({
       username: req.body.username,
-      email: req.body.email,
       password: hash,
 
     });

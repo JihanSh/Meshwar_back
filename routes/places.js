@@ -6,6 +6,7 @@ const places = express.Router();
 
 places.post("/", upload.array("images"), controller.post);
 places.get("/", controller.getAll);
+places.get("/random", controller.getRandomPlace);
 places.get("/:id", controller.get);
 places.put("/:id", upload.array("images"), controller.put);
 places.delete("/:id", controller.delete);
