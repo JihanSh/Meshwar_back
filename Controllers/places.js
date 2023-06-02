@@ -11,7 +11,8 @@ cloudinary.config({
 class Controller {
   async post(req, res) {
     try {
-      const { name, description, city, price, rating, activity, location } = req.body;
+      const { name, description, city, price, rating, activity, location } =
+        req.body;
       console.log(activity);
 
       let images = [];
@@ -66,19 +67,19 @@ class Controller {
       res.status(500).json({ message: error.message });
     }
   }
-  async  getRandomPlace(req, res) {
-  try {
-    const count = await Place.countDocuments(); // Get the total count of places in the database
-    const randomIndex = Math.floor(Math.random() * count); // Generate a random index within the range of the count
-    const randomPlace = await Place.findOne()
-      .populate("activity","name")
-      .populate("location","name")
-      .skip(randomIndex); // Skip to the random index
-    res.status(200).json(randomPlace);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
+  async getRandomPlace(req, res) {
+    try {
+      const count = await Place.countDocuments(); // Get the total count of places in the database
+      const randomIndex = Math.floor(Math.random() * count); // Generate a random index within the range of the count
+      const randomPlace = await Place.findOne()
+        .populate("activity", "name")
+        .populate("location", "name")
+        .skip(randomIndex); // Skip to the random index
+      res.status(200).json(randomPlace);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
   }
-}
 
   // get product by id
   async get(req, res) {
@@ -234,6 +235,19 @@ class Controller {
         location: locationId,
       }).populate("location");
       res.status(200).json(places);
+    } catch (err) {
+      res.status(500).json({ message: err.message });
+    }
+  }
+  async getFeedbackofPlace(req, res) {
+    const feedbackId = req.params.feedback;
+    try {
+      const feedback = await Place.find({
+        feedback: feedbackId,
+      }).populate("feedback");
+      {
+      }
+      res.status(200).json(feedback);
     } catch (err) {
       res.status(500).json({ message: err.message });
     }

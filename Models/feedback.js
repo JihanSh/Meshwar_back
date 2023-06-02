@@ -31,13 +31,7 @@ const feedbackSchema = new Schema(
         required: [true, "Please include the user"],
       },
     ],
-    place: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "Place",
-        required: [true, "Please include the Place"],
-      },
-    ],
+
   },
   { timestamps: true }
 );

@@ -194,17 +194,7 @@ async  post(req, res) {
       res.status(500).json({ message: err.message });
     }
   }
-  async getFeedbackofPlace(req, res) {
-    const placeId = req.params.place;
-    try {
-      const places = await Feedback.find({
-        place: placeId,
-      }).populate("place");
-      res.status(200).json(places);
-    } catch (err) {
-      res.status(500).json({ message: err.message });
-    }
-  }
+
 }
 const controller = new Controller();
 
