@@ -4,7 +4,7 @@ import { upload } from "../middleware/upload.js";
 
 const feedbacks = express.Router();
 
-feedbacks.post("/", upload.array("images"), controller.post);
+feedbacks.post("/", upload.array("feedImages"), controller.post);
 feedbacks.get("/", controller.getAll);
 feedbacks.get("/:id", controller.get);
 feedbacks.put("/:id", controller.put);

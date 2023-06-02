@@ -8,7 +8,7 @@ const feedbackSchema = new Schema(
       type: String,
       required: true,
     },
-    images: [
+    feedImages: [
       {
         public_id: {
           type: String,

@@ -21,12 +21,12 @@ async  post(req, res) {
   try {
     const { description, stars, user_id, place } = req.body;
 
-    let images = [];
+    let feedImages = [];
 
     if (req.files && req.files.length > 0) {
       for (let i = 0; i < req.files.length; i++) {
         const uploadedImage = await cloudinary.uploader.upload(req.files[i].path);
-        images.push({
+        feedImages.push({
           public_id: uploadedImage.public_id,
           url: uploadedImage.secure_url,
         });
@@ -36,7 +36,7 @@ async  post(req, res) {
     const feedback = new Feedback({
       description,
       stars,
-      images,
+      feedImages,
       user_id,
       place,
     });
