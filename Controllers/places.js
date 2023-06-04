@@ -239,19 +239,17 @@ class Controller {
       res.status(500).json({ message: err.message });
     }
   }
-  async getFeedbackofPlace(req, res) {
-    const feedbackId = req.params.feedback;
-    try {
-      const feedback = await Place.find({
-        feedback: feedbackId,
-      }).populate("feedback");
-      {
-      }
-      res.status(200).json(feedback);
-    } catch (err) {
-      res.status(500).json({ message: err.message });
-    }
-  }
+  // async getFeedbackofPlace(req, res) {
+  //   const feedbackId = req.params.feedback;
+  //   try {
+  //     const feedback = await Place.find({
+  //       feedback: feedbackId,
+  //     }).populate("feedback");
+  //     res.status(200).json(feedback);
+  //   } catch (err) {
+  //     res.status(500).json({ message: err.message });
+  //   }
+  // }
 }
 const controller = new Controller();
 

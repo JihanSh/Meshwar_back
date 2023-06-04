@@ -20,7 +20,7 @@ class Controller {
   async post(req, res) {
     try {
       const { description, stars } = req.body;
-      const { place } = req.params; 
+      const { place } = req.params;
       let feedImages = [];
 
       if (req.files && req.files.length > 0) {
@@ -59,6 +59,22 @@ class Controller {
       const feedback = await Feedback.findById(id).populate(
         "user_id",
         "username"
+      );
+
+      if (!feedback) {
+        res.status(404).json({ message: "feedback not found" });
+      } else {
+        res.status(200).json(feedback);
+      }
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  }
+  async get(req, res) {
+    const  placeid  = req.params.id;
+    try {
+      const feedback = await Feedback.find({place:placeid}).populate(
+      "place"
       );
 
       if (!feedback) {

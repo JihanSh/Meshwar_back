@@ -6,6 +6,7 @@ const feedbacks = express.Router();
 
 feedbacks.post("/:placeID", upload.array("feedImages"), controller.post);
 feedbacks.get("/", controller.getAll);
+feedbacks.get("/place/:id", controller.get);
 feedbacks.get("/:id", controller.get);
 feedbacks.put("/:id", controller.put);
 // feedbacks.delete("/:id", controller.delete);

@@ -45,13 +45,7 @@ const placeSchema = new Mongoose.Schema({
       ref: "Location",
     },
   ],
-  feedback: [
-    {
-      type: Mongoose.Schema.Types.ObjectId,
-      ref: "Feedback",
-      // required: [true, "Please include the Feedback"],
-    },
-  ],
+
 });
 const Place = Mongoose.model("Place", placeSchema);
 export default Place;
