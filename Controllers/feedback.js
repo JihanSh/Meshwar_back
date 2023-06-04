@@ -17,53 +17,40 @@ class Controller {
       res.status(500).json({ message: error.message });
     }
   }
-async  post(req, res) {
-  try {
-    const { description, stars, user_id, place } = req.body;
+  async post(req, res) {
+    try {
+      const { description, stars } = req.body;
+      const { place } = req.params; 
+      let feedImages = [];
 
-    let feedImages = [];
-
-    if (req.files && req.files.length > 0) {
-      for (let i = 0; i < req.files.length; i++) {
-        const uploadedImage = await cloudinary.uploader.upload(req.files[i].path);
-        feedImages.push({
-          public_id: uploadedImage.public_id,
-          url: uploadedImage.secure_url,
-        });
+      if (req.files && req.files.length > 0) {
+        for (let i = 0; i < req.files.length; i++) {
+          const uploadedImage = await cloudinary.uploader.upload(
+            req.files[i].path
+          );
+          feedImages.push({
+            public_id: uploadedImage.public_id,
+            url: uploadedImage.secure_url,
+          });
+        }
       }
+
+      const feedback = new Feedback({
+        description,
+        stars,
+        feedImages,
+        place,
+      });
+
+      await feedback.populate("user_id", "username");
+      await feedback.save();
+
+      res.status(201).json({ feedback });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Server error" });
     }
-
-    const feedback = new Feedback({
-      description,
-      stars,
-      feedImages,
-      user_id,
-      place,
-    });
-
-    await feedback.populate("user_id", "username");
-    await feedback.save();
-
-    // Calculate the average feedback for the place
-    const feedbacks = await Feedback.find({ place: place });
-    const totalFeedbacks = feedbacks.length;
-    let totalStars = 0;
-
-    for (let i = 0; i < totalFeedbacks; i++) {
-      totalStars += feedbacks[i].stars;
-    }
-
-    const averageStars = totalFeedbacks > 0 ? totalStars / totalFeedbacks : 0;
-
-    res.status(201).json({ feedback, averageStars });
-
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Server error" });
   }
-}
-
-
 
   // get feedback by id
   async get(req, res) {
@@ -194,7 +181,6 @@ async  post(req, res) {
       res.status(500).json({ message: err.message });
     }
   }
-
 }
 const controller = new Controller();
 
