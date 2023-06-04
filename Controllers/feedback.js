@@ -20,7 +20,8 @@ class Controller {
   async post(req, res) {
     try {
       const { description, stars } = req.body;
-      const { place } = req.params;
+      const placeid  = req.params.id;
+      console.log(placeid)
       let feedImages = [];
 
       if (req.files && req.files.length > 0) {
@@ -39,10 +40,11 @@ class Controller {
         description,
         stars,
         feedImages,
-        place,
+        place: placeid
+        
       });
 
-      await feedback.populate("user_id", "username");
+      await feedback.populate("place");
       await feedback.save();
 
       res.status(201).json({ feedback });
@@ -70,6 +72,7 @@ class Controller {
       res.status(500).json({ message: error.message });
     }
   }
+  
   async get(req, res) {
     const  placeid  = req.params.id;
     try {

@@ -4,9 +4,9 @@ import { upload } from "../middleware/upload.js";
 
 const feedbacks = express.Router();
 
-feedbacks.post("/:placeID", upload.array("feedImages"), controller.post);
-feedbacks.get("/", controller.getAll);
 feedbacks.get("/place/:id", controller.get);
+feedbacks.post("/:id", upload.array("feedImages"), controller.post);
+feedbacks.get("/", controller.getAll);
 feedbacks.get("/:id", controller.get);
 feedbacks.put("/:id", controller.put);
 // feedbacks.delete("/:id", controller.delete);
