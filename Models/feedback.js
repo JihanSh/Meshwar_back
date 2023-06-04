@@ -6,7 +6,7 @@ const feedbackSchema = new Schema(
   {
     description: {
       type: String,
-      required: true,
+      // required: true,
     },
     feedImages: [
       {
@@ -22,13 +22,13 @@ const feedbackSchema = new Schema(
     ],
     stars: {
       type: Number,
-      required: true,
+      // required: true,
     },
     user_id: [
       {
         type: Schema.Types.ObjectId,
         ref: "User",
-        required: [true, "Please include the user"],
+        // required: [true, "Please include the user"],
       },
     ],
 

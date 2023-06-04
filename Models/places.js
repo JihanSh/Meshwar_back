@@ -49,7 +49,7 @@ const placeSchema = new Mongoose.Schema({
     {
       type: Mongoose.Schema.Types.ObjectId,
       ref: "Feedback",
-      required: [true, "Please include the Feedback"],
+      // required: [true, "Please include the Feedback"],
     },
   ],
 });
